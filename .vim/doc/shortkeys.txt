@@ -1,0 +1,114 @@
+*shortkeys.txt*       buffer/file/command/tag/etc explorer with fuzzy matching.
+
+        Copyright (c) 2007-2009 Takeshi NISHIDA
+
+shortkeys                                                
+
+INTRODUCTION                    |shortkeys-intro|
+
+==============================================================================
+INTRODUCTION                                                *shortkeys-intro*
+注释快捷键
+[count],cc:光标以下count行逐行添加注释(7,cc)
+[count],cu:光标以下count行逐行取消注释(7,cu)
+[count],cm:光标以下count行尝试添加块注释(7,cm) 
+
+跳转快捷键
+<F2-s>: 查找C语言符号，即查找函数名、宏、枚举值等出现的地方
+<F2-g>: 查找函数、宏、枚举等定义的位置，类似ctags所提供的功能
+<F2-c>: 查找调用本函数的函数
+<F2-t>: 查找指定的字符串
+<F2-e>: 查找 egrep模式，相当于egrep功能，但查找速度快多了
+<F2-f>: 查找并打开文件，类似vim的find功能
+<F2-i>: 查找包含本文件的文件
+<F2-d>: 查找本函数调用的函数
+
+<F12> :重建tag文件
+
+更新minibuf窗口
+<leader>u :TMiniBufExplorer<cr>:TMiniBufExplorer<cr>
+
+打开taglist
+<F8> :Tlist
+
+打开文件浏览器窗口
+<S-F8> :NERDTreeToggle<CR>
+
+添加注释
+fg : Dox
+
+查找
+<C-f> :查找当前字符串
+<C-g> :查找当前字符串，并将结果增加到quickfix
+
+<leader>w :w!<cr>
+<leader>qq :qa!<cr>
+<leader>e :e! ~/.vimrc<cr>
+
+<leader><cr> :noh<cr>
+
+<leader>bd :Bclose<cr>
+<leader>ba :1,300 bd!<cr>
+
+<leader>tn :tabnew %<cr>
+<leader>te :tabedit
+<leader>tc :tabclose<cr>
+<leader>tm :tabmove
+
+" When pressing <leader>cd switch to the directory of the open buffer
+<leader>cd :cd %:p:h<cr>
+
+vnoremap $1 <esc>`>a)<esc>`<i(<esc>
+vnoremap $2 <esc>`>a]<esc>`<i[<esc>
+vnoremap $3 <esc>`>a}<esc>`<i{<esc>
+vnoremap $$ <esc>`>a"<esc>`<i"<esc>
+vnoremap $q <esc>`>a'<esc>`<i'<esc>
+vnoremap $e <esc>`>a"<esc>`<i"<esc>
+
+inoremap $1 ()<esc>i
+inoremap $2 []<esc>i
+inoremap $3 {}<esc>i
+inoremap $4 {<esc>o}<esc>O
+inoremap $q ''<esc>i
+inoremap $e ""<esc>i
+
+<leader>cc :botright cope<cr>
+<C-n> :cnext<cr>
+<C-p> :cprev<cr>
+
+python语法检查
+<leader>cs
+
+查找tag
+<F7> :FufTag<cr>
+查找文件
+<C-F7> :FufTaggedFile<cr>
+
+<Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+<Leader>ff :%s/$//g<cr>:%s// /g<cr>
+
+切换16进制模式
+<leader>h
+
+autocmd BufNewFile,BufRead *.c
+            \ map <F9> <Esc><Esc>:!gcc -g -Wall -lm -o %< % <CR>
+autocmd BufNewFile,BufRead *.c
+            \ map <S-F9> <Esc><Esc>:!gcc -O3 -o %< % <CR>
+
+autocmd BufNewFile,BufRead *.cc,*.cpp,*.c++,*.cxx,*.CC
+            \ map <F9> <Esc><Esc>:!g++ -g -Wall -o %< % <CR>
+autocmd BufNewFile,BufRead *.cc,*.cpp,*.c++,*.cxx,*.CC
+            \ map <S-F9> <Esc><Esc>:!g++ -O3 -o %< % <CR>
+
+autocmd BufNewFile,BufRead *.sh
+            \ map <F9> <Esc><Esc>:!./% <CR>
+
+autocmd BufNewFile,BufRead *.py
+            \ map <F9> <Esc><Esc>:!python -u % <CR>
+
+map <C-F9> <Esc><Esc>:!./%<<CR>
+map <C-F8> <Esc><Esc>:!gdb ./%<<CR>
+map <C-F5> :make<CR>
+nmap <S-C> :stj <C-R>=expand("<cword>")<CR><CR>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
