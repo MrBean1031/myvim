@@ -138,7 +138,7 @@ function! Do_CsTag()
         endif
     endif
     if (executable('ctags'))
-        silent! execute "!ctags -R -f ./tags --c++-kinds=+p --c-kinds=+p --fields=+iaS --extra=+q"
+        silent! execute "!ctags -R --c++-kinds=+p --c-kinds=+p --fields=+iaS --extra=+q"
     endif
     if(executable('cscope') && has("cscope"))
         " 设定可以使用quickfix窗口来浏览cscope结果
@@ -214,12 +214,12 @@ let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
 " let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 "
 " set autochdir
-set tags=./tags  " 引导omnicppcomplete找到tags文件
+"set tags=./tags  " 引导omnicppcomplete找到tags文件
 
 
 " echofunc配置
 if (g:echofunc_en)
-set tags=./tags
+"set tags=./tags
 endif
 
 
@@ -731,7 +731,7 @@ if has("multi_byte")
     set fileencodings=ucs-bom,utf-8,chinese
     " 设定默认解码
     set fenc=utf-8
-    set fencs=usc-bom,utf-8,euc-jp,gb18030,gbk,gb2312,cp936,iso-8859-1
+    set fencs=usc-bom,utf-8,gb18030,gbk,gb2312,cp936,iso-8859-1,euc-jp
 endif
 
 set cscopequickfix=c-,d-,e-,g-,i-,s-,t-
