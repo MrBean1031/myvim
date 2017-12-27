@@ -41,15 +41,34 @@ au GUIEnter * simalt ~x   "窗口最大化
 "set cursorline           "高亮当前行
 "set cursorcolumn         "高亮当前列
 
-
 "Vundle Config
 set rtp+=~/.vim/bundle/vundle/  
-call vundle#rc()  
-" let Vundle manage Vundle  
-" required!
-Bundle 'gmarik/vundle' 
+call vundle#begin()  
 
-"                                           /** vundle命令 **/  
+" let Vundle manage Vundle, required 
+Bundle 'VundleVim/Vundle.vim' 
+
+" Plugin 'L9'
+Plugin 'L9'
+
+" 在vim中打开airline
+let g:airline_en = 1
+if (g:airline_en)
+Plugin 'vim-airline/vim-airline'
+Plugin 'tpope/vim-fugitive'
+endif
+
+" 输入(时显示函数原型
+let g:echofunc_en = 1
+if (g:echofunc_en)
+Plugin 'mbbill/echofunc'
+endif
+
+" All of your Plugins must be added before the following line
+call vundle#end()         "required
+filetype plugin indent on "required
+
+"                   -- vundle命令 --  
 " Brief help  
 " :BundleList          - list configured bundles  
 " :BundleInstall(!)    - install(update) bundles  
@@ -64,17 +83,6 @@ Bundle 'gmarik/vundle'
 "set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 "set laststatus=2
 "set t_Co=256
-
-" 在vim中打开airline
-let g:airline_en = 1
-if (g:airline_en)
-Plugin 'vim-airline'
-endif
-" 输入(时现实函数原型
-let g:echofunc_en = 1
-if (g:echofunc_en)
-Plugin 'mbbill/echofunc'
-endif
 
 
 set tags=./tags  "必须放在ctags前，omnicppcomplete等插件才能生效
@@ -138,7 +146,7 @@ function! Do_CsTag()
         endif
     endif
     if (executable('ctags'))
-        silent! execute "!ctags -R --c++-kinds=+p --c-kinds=+p --fields=+iaS --extra=+q"
+        silent! execute "!ctags -R -f ./tags --c++-kinds=+p --c-kinds=+p --fields=+iaS --extra=+q"
     endif
     if(executable('cscope') && has("cscope"))
         " 设定可以使用quickfix窗口来浏览cscope结果
@@ -168,13 +176,14 @@ if (g:airline_en)
 set laststatus=2 "永远显示状态栏
 let g:airline_powerline_fonts=1
 let g:airline#extensions#syntastic#enabled=1
-let g:airline#extensions#whitespace#enable=0
+let g:airline#extensions#whitespace#enabled=0
 let g:airline#extensions#whitespace#symbol='!'
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extension#tabline#buffer_nr_show=1
 let g:airline#extension#tabline#idx_mode=0
 let g:airline#extension#tabline#show_splits=1
 let g:airline#extension#tabline#fnamemod=':t'
+let airline#extensions#default#section_use_groupitems = 1
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
@@ -207,14 +216,13 @@ let OmniCpp_NamespaceSearch=1   "打开命名空间
 let OmniCpp_GlobalScopeSearch=1  
 let OmniCpp_DefaultNamespace=["std"]  
 let OmniCpp_ShowPrototypeInAbbr=1     "打开显示函数原型
-"let OmniCpp_SelectFirstItem = 2     "自动弹出时自动跳至第一个
+let OmniCpp_SelectFirstItem = 0     "自动弹出时自动跳至第一个
 "
 "let OmniCpp_NamespaceSearch = 2     " search namespaces in the current buffer   and in included files
 let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
 " let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-"
 " set autochdir
-"set tags=./tags  " 引导omnicppcomplete找到tags文件
+set tags=./tags  " 引导omnicppcomplete找到tags文件
 
 
 " echofunc配置
@@ -320,7 +328,7 @@ set hid "Change buffer - without saving
 set backspace=indent,eol,start whichwrap+=<,>,[,] "允许退格键的使用
 set whichwrap+=<,>,h,l
 
-set ignorecase "Ignore case when searching
+"set ignorecase "Ignore case when searching
 
 set hlsearch "Highlight search things
 
@@ -731,7 +739,7 @@ if has("multi_byte")
     set fileencodings=ucs-bom,utf-8,chinese
     " 设定默认解码
     set fenc=utf-8
-    set fencs=usc-bom,utf-8,gb18030,gbk,gb2312,cp936,iso-8859-1,euc-jp
+    set fencs=usc-bom,utf-8,gb18030,gbk,gb2312,cp936,iso-8859-1 ",euc-jp
 endif
 
 set cscopequickfix=c-,d-,e-,g-,i-,s-,t-
