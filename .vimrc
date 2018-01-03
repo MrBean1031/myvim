@@ -85,7 +85,7 @@ filetype plugin indent on "required
 "set t_Co=256
 
 
-set tags=./tags  "必须放在ctags前，omnicppcomplete等插件才能生效
+set tags+=tags  "必须放在ctags前，omnicppcomplete等插件才能生效
 
 nmap sy :call Do_CsTag()<CR>
 nmap <leader>fs :cs find s <C-R>=expand("<cword>")<CR><CR>:copen<CR><CR>
@@ -148,7 +148,7 @@ function! Do_CsTag()
     if (executable('ctags'))
         silent! execute "!ctags -R -f ./tags --c++-kinds=+p --c-kinds=+p --fields=+iaS --extra=+q"
     endif
-    if(executable('cscope') && has("cscope"))
+    if(executable('cscope'))
         " 设定可以使用quickfix窗口来浏览cscope结果
         set cscopequickfix=s-,c-,d-,i-,t-,e-
         " 支持用Ctrl+]和Ctrl+t在代码间跳转
@@ -222,12 +222,12 @@ let OmniCpp_SelectFirstItem = 0     "自动弹出时自动跳至第一个
 let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
 " let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 " set autochdir
-set tags=./tags  " 引导omnicppcomplete找到tags文件
+"set tags=tags  " 引导omnicppcomplete找到tags文件
 
 
 " echofunc配置
 if (g:echofunc_en)
-"set tags=./tags
+"set tags=tags
 endif
 
 
