@@ -183,7 +183,7 @@ let g:airline#extension#tabline#buffer_nr_show=1
 let g:airline#extension#tabline#idx_mode=0
 let g:airline#extension#tabline#show_splits=1
 let g:airline#extension#tabline#fnamemod=':t'
-let airline#extensions#default#section_use_groupitems = 1
+let g:airline#extensions#default#section_use_groupitems = 0
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
@@ -800,8 +800,8 @@ endif
 set display=lastline
 
 "保存和恢复工作区状态
-nmap ms :mksession! workspace.vim<CR> :wviminfo! workspace.viminfo<CR>
-nmap rs :source workspace.vim<CR> :rviminfo workspace.viminfo<CR>
+nmap <leader>ms :mksession! workspace.vim<CR> :wviminfo! workspace.viminfo<CR>
+nmap <leader>rs :source workspace.vim<CR> :rviminfo workspace.viminfo<CR>
 
 " ---指定数值光标移动
 map H 5h
