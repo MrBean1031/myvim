@@ -812,3 +812,10 @@ vmap H 5h
 vmap J 5j
 vmap K 5k
 vmap L 5l
+
+""""""""""""""""""""""""""""""
+" => BufExplorer settings
+""""""""""""""""""""""""""""""
+let g:bufExplorerShowRelativePath=1
+let g:bufExplorerSortBy='name'       " Sort by the buffer's name.
+
