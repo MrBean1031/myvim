@@ -228,6 +228,8 @@ let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
 " echofunc配置
 if (g:echofunc_en)
 "set tags=tags
+let g:EchoFuncKeyNext='<M-down>'
+let g:EchoFuncKeyPrev='<M-up>'
 endif
 
 
@@ -391,10 +393,10 @@ set bufhidden=hide
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 用空格代替制表符
 set expandtab
-" 统一缩进为2
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+" 统一缩进为4
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set smarttab
 "指定文件类型,这样.mak和Makefile文件将都会使用真实tab
 autocmd FileType Makefile set noexpandtab
@@ -818,4 +820,4 @@ vmap L 5l
 """"""""""""""""""""""""""""""
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSortBy='name'       " Sort by the buffer's name.
-
+let g:bufExplorerShowUnlisted=0      " Do not show unlisted buffers.  
