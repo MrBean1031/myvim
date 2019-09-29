@@ -35,11 +35,18 @@ else
 endif
 
 "设置;直接输入:，省事
-nnoremap ; :
+"nnoremap ; :
 
 au GUIEnter * simalt ~x   "窗口最大化
 "set cursorline           "高亮当前行
 "set cursorcolumn         "高亮当前列
+
+" With a map leader it's possible to do extra key combinations
+" like dafleader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
+let maplocalleader = ","
+let g:maplocalleader = ","
 
 "Vundle Config
 set rtp+=~/.vim/bundle/vundle/  
@@ -87,7 +94,7 @@ filetype plugin indent on "required
 
 set tags+=tags  "必须放在ctags前，omnicppcomplete等插件才能生效
 
-nmap sy :call Do_CsTag()<CR>
+nmap sy :call CscopeSync()<CR>
 nmap <leader>fs :cs find s <C-R>=expand("<cword>")<CR><CR>:copen<CR><CR>
 nmap <leader>fg :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <leader>fc :cs find c <C-R>=expand("<cword>")<CR><CR>:copen<CR><CR>
@@ -96,7 +103,39 @@ nmap <leader>fe :cs find e <C-R>=expand("<cword>")<CR><CR>:copen<CR><CR>
 nmap <leader>ff :cs find f <C-R>=expand("<cfile>")<CR><CR>:copen<CR><CR>
 nmap <leader>fi :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>:copen<CR><CR>
 nmap <leader>fd :cs find d <C-R>=expand("<cword>")<CR><CR>:copen<CR><CR>
-function! Do_CsTag()
+
+nmap ;fs :cs find s 
+nmap ;fg :cs find g 
+nmap ;fc :cs find c 
+nmap ;ft :cs find t 
+nmap ;fe :cs find e 
+nmap ;ff :cs find f 
+nmap ;fi :cs find i 
+nmap ;fd :cs find d 
+
+function! CscopeInit()
+    if (executable("cscope"))
+        silent! execute "cs kill -1"
+        " 设定可以使用quickfix窗口来浏览cscope结果
+        set cscopequickfix=s-,c-,d-,i-,t-,e-
+        " 支持用Ctrl+]和Ctrl+t在代码间跳转
+        set cscopetag
+        " 如果想反向搜索顺序设置为1
+        set csto=0
+        if filereadable("cscope.out")
+            execute "cs add cscope.out"
+            execute "normal :<CR>"
+        elseif $CSCOPE_DB!=""
+            execute "cs add $CSCOPE_DB"
+        endif
+        set cscopeverbose
+    endif
+    silent execute "redraw!"
+endfunction
+
+autocmd VimEnter * silent call CscopeInit()
+
+function! CscopeSync()
     let dir = getcwd()
     if filereadable("tags")
         if(g:iswindows==1)
@@ -105,12 +144,9 @@ function! Do_CsTag()
             let tagsdeleted=delete("./"."tags")
         endif
         if(tagsdeleted!=0)
-            echohl WarningMsg | echo "Fail to do tags! I cannot delete the tags" | echohl None
+            echohl WarningMsg | echo "Fail to do tags! The tags cannot be deleted." | echohl None
             return
         endif
-    endif
-    if has("cscope")
-      silent! execute "cs kill -1"
     endif
     if filereadable("cscope.files")
         if(g:iswindows==1)
@@ -119,7 +155,7 @@ function! Do_CsTag()
             let csfilesdeleted=delete("./"."cscope.files")
         endif
         if(csfilesdeleted!=0)
-            echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.files" | echohl None
+            echohl WarningMsg | echo "Fail to do cscope! The cscope.files cannot be deleted." | echohl None
             return
         endif
     endif
@@ -130,7 +166,7 @@ function! Do_CsTag()
             let csoutdeleted=delete("./"."cscope.out")
         endif
         if(csoutdeleted!=0)
-            echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.out" | echohl None
+            echohl WarningMsg | echo "Fail to do cscope! The cscope.out cannot be deleted." | echohl None
             return
         endif
     endif
@@ -141,35 +177,27 @@ function! Do_CsTag()
             let fntdeleted=delete("./"."filenametags")
         endif
         if(fntdeleted!=0)
-            echohl WarningMsg | echo "Fail to do filename! I cannot delete the filenametags" | echohl None
+            echohl WarningMsg | echo "Fail to do filename! The filenametags cannot be deleted." | echohl None
             return
         endif
     endif
     if (executable('ctags'))
-        silent! execute "!ctags -R -f ./tags --c++-kinds=+p --c-kinds=+p --fields=+iaS --extra=+q"
+        silent! execute "!ctags -R -f ./tags --c++-kinds=+p --c-kinds=+p --languages=+Asm --fields=+iaS --extra=+q"
     endif
     if(executable('cscope'))
-        " 设定可以使用quickfix窗口来浏览cscope结果
-        set cscopequickfix=s-,c-,d-,i-,t-,e-
-        " 支持用Ctrl+]和Ctrl+t在代码间跳转
-        set cscopetag
-        " 如果想反向搜索顺序设置为1
-        set csto=0
-        if(g:iswindows!=1)
-            silent! execute "!find . -name '*.[hHcCsS]*' -o -name '*.inl' -o -name '*.[xX]*' -o -name '*.[jJ][aA][vV][aA]' -o -name '*.py' > cscope.files"
-        else
+        if(g:iswindows==1)
             silent! execute "!dir /s/b *.c*,*.inl,*.x*,*.h*,*.py,*.java,*.s* >> cscope.files"
+        else
+            " silent! execute "!find . -name '*.[hHcCsS]*' -o -name '*.inl' -o -name '*.[xX]*' -o -name '*.[jJ][aA][vV][aA]' -o -name '*.py' > cscope.files"
+            silent! execute "!find . ! -path '*git*' ! -path '*svn*' \
+                             -name '*.[hHcCsS]*' -o -name '*.inl' -o -name '*.[xX]*' -o -name '*.[jJ][aA][vV][aA]' -o -name '*.py' > cscope.files" 
         endif
         silent! execute "!cscope -Rb"
-        execute "normal :"
-        if filereadable("cscope.out")
-            execute "cs add cscope.out"
-        endif
     endif
     if filereadable("filenametags")
       let g:LookupFile_TagExpr="./filenametags"
     endif
-    silent execute "redraw!"
+    call CscopeInit()
 endfunction
 
 if (g:airline_en)
@@ -294,13 +322,6 @@ set history=300
 
 " Set to auto read when a file is changed from the outside
 set autoread
-
-" With a map leader it's possible to do extra key combinations
-" like dafleader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
-let maplocalleader = ","
-let g:maplocalleader = ","
 
 " Fast saving
 nmap <leader>w :w!<cr>
@@ -749,7 +770,7 @@ set cscopequickfix=c-,d-,e-,g-,i-,s-,t-
 " 带有如下符号的单词不要被换行分割
 set iskeyword+=_,$,@,%,#,-
 
-noremap <Leader>ff :%s/$//g<cr>:%s// /g<cr>
+"noremap <Leader>ff :%s/$//g<cr>:%s// /g<cr>
 
 "To hex modle
 let s:hexModle = "N"
