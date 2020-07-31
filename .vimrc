@@ -49,11 +49,11 @@ let maplocalleader = ","
 let g:maplocalleader = ","
 
 "Vundle Config
-set rtp+=~/.vim/bundle/vundle/  
+set rtp+=~/.vim/bundle/vundle  
 call vundle#begin()  
 
 " let Vundle manage Vundle, required 
-Bundle 'VundleVim/Vundle.vim' 
+Bundle 'gmarik/vundle' 
 
 " Plugin 'L9'
 Plugin 'L9'

@@ -1,0 +1,7 @@
+.vim/bundle/
+tags
+cscope.files
+cscope.out
+filenametags
+workspace.vim
+workspace.viminfo
