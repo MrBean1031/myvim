@@ -115,7 +115,7 @@ nmap ;fd :cs find d
 
 function! CscopeInit()
     if (executable("cscope"))
-        silent! execute "cs kill -1"
+        execute "cs kill -1"
         " 设定可以使用quickfix窗口来浏览cscope结果
         set cscopequickfix=s-,c-,d-,i-,t-,e-
         " 支持用Ctrl+]和Ctrl+t在代码间跳转
@@ -128,6 +128,9 @@ function! CscopeInit()
         elseif $CSCOPE_DB!=""
             execute "cs add $CSCOPE_DB"
         endif
+        if filereadable("filenametags")
+            let g:LookupFile_TagExpr="./filenametags"
+        endif
         set cscopeverbose
     endif
     silent execute "redraw!"
@@ -136,6 +139,7 @@ endfunction
 autocmd VimEnter * silent call CscopeInit()
 
 function! CscopeSync()
+    silent! execute "cs kill -1"
     let dir = getcwd()
     if filereadable("tags")
         if(g:iswindows==1)
@@ -193,9 +197,6 @@ function! CscopeSync()
                              -name '*.[hHcCsS]*' -o -name '*.inl' -o -name '*.[xX]*' -o -name '*.[jJ][aA][vV][aA]' -o -name '*.py' > cscope.files" 
         endif
         silent! execute "!cscope -Rb"
-    endif
-    if filereadable("filenametags")
-      let g:LookupFile_TagExpr="./filenametags"
     endif
     call CscopeInit()
 endfunction
@@ -842,3 +843,5 @@ vmap L 5l
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSortBy='name'       " Sort by the buffer's name.
 let g:bufExplorerShowUnlisted=0      " Do not show unlisted buffers.  
+
+nmap go <c-]>
